@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bouquet Gourmand — Des fleurs qui se dégustent</title>
+<title>Bouquet Gourmand — Des fleurs qui se dégustent — v2.1</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:wght@200;300;400&display=swap" rel="stylesheet">
 <script src="https://js.stripe.com/v3/"></script>
 <style>
@@ -16,132 +16,123 @@
 --or: #c9a060;
 --blanc: #fffaf8;
 --texte: #6b3d35;
---texte-light: #a06b60;
+--texte-light: #a07060;
 }
-
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'DM Sans',sans-serif; color:var(--texte); background:var(--blanc); line-height:1.6; }
-a { color:var(--rose-fonce); text-decoration:none; }
+html { scroll-behavior:smooth; }
+body { background:var(--blanc); font-family:'DM Sans',sans-serif; color:var(--chocolat); overflow-x:hidden; }
 
-/* HERO */
-.hero { padding:90px 20px; background:linear-gradient(135deg,var(--rose-pale) 0%,#f5dce5 100%); text-align:center; position:relative; overflow:hidden; min-height:500px; display:flex; flex-direction:column; justify-content:center; align-items:center; }
-.deco { position:absolute; opacity:0.1; pointer-events:none; }
-.deco1 { width:300px; height:300px; background:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="%23c8607a" stroke-width="2"/></svg>'); top:-50px; left:-50px; }
-.deco2 { width:250px; height:250px; background:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50,10 Q90,50 50,90 Q10,50 50,10" fill="none" stroke="%23c8607a" stroke-width="2"/></svg>'); bottom:-30px; right:-30px; }
-.hero-tag { font-size:13px; color:var(--rose-fonce); letter-spacing:1px; margin-bottom:20px; }
-.hero h1 { font-family:'Playfair Display',serif; font-size:64px; font-weight:400; margin:0; }
-.hero h1 em { font-style:italic; }
-.hero-sub { font-size:18px; color:var(--texte); margin:15px 0 40px; }
-.hero-cta { display:inline-block; padding:14px 40px; background:var(--rose-fonce); color:white; border-radius:30px; font-weight:500; transition:all 0.3s; }
-.hero-cta:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(200,96,122,0.3); }
+.hero {
+min-height:100vh;
+background: radial-gradient(ellipse at 20% 80%, rgba(232,160,176,0.35) 0%, transparent 55%),
+radial-gradient(ellipse at 80% 20%, rgba(249,240,235,0.8) 0%, transparent 50%),
+linear-gradient(160deg, #fce4ec 0%, #fdf0f4 40%, #fff8f5 100%);
+display:flex; flex-direction:column; align-items:center; justify-content:center;
+text-align:center; padding:80px 20px 60px; position:relative; overflow:hidden;
+}
+.deco { position:absolute; border-radius:50%; pointer-events:none; }
+.deco1 { width:500px; height:500px; background:radial-gradient(circle, rgba(232,160,176,0.18), transparent 70%); top:-100px; right:-100px; animation:float 8s ease-in-out infinite; }
+.deco2 { width:300px; height:300px; background:radial-gradient(circle, rgba(201,160,96,0.12), transparent 70%); bottom:-50px; left:-50px; animation:float 10s 2s ease-in-out infinite reverse; }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-20px)} }
 
-/* SECTIONS */
-section { padding:80px 20px; }
-.section-label { font-size:12px; font-weight:500; letter-spacing:2px; color:var(--rose-fonce); text-transform:uppercase; margin-bottom:12px; }
-h2 { font-family:'Playfair Display',serif; font-size:42px; font-weight:400; margin-bottom:40px; text-align:center; }
+.hero-tag { display:inline-block; background:var(--rose-pale); color:var(--rose-fonce); font-size:10px; font-weight:400; letter-spacing:4px; text-transform:uppercase; padding:8px 20px; border-radius:30px; margin-bottom:28px; }
+.hero h1 { font-family:'Playfair Display',serif; font-size:clamp(52px,11vw,110px); font-weight:400; line-height:0.95; color:var(--chocolat); margin-bottom:10px; }
+.hero h1 em { font-style:italic; color:var(--rose-fonce); }
+.hero-sub { font-family:'Playfair Display',serif; font-style:italic; font-size:clamp(16px,2.5vw,22px); color:var(--texte-light); margin-bottom:44px; }
+.hero-cta { display:inline-block; background:var(--rose-fonce); color:#fff; padding:16px 44px; border-radius:50px; font-size:12px; font-weight:400; letter-spacing:3px; text-transform:uppercase; text-decoration:none; transition:all 0.3s; box-shadow:0 8px 30px rgba(200,96,122,0.3); }
+.hero-cta:hover { background:#b04060; transform:translateY(-3px); }
 
-/* INTRO */
-.intro { padding:60px 20px; background:#fafaf8; text-align:center; }
-.intro p { max-width:700px; margin:0 auto; font-size:16px; line-height:1.8; }
+.intro { padding:90px 20px; text-align:center; max-width:680px; margin:0 auto; }
+.section-label { font-size:10px; letter-spacing:5px; text-transform:uppercase; color:var(--rose-fonce); margin-bottom:18px; display:block; }
+.intro h2 { font-family:'Playfair Display',serif; font-size:clamp(30px,5vw,48px); font-weight:400; line-height:1.2; margin-bottom:24px; }
+.intro p { font-size:15px; font-weight:300; line-height:1.9; color:var(--texte); }
+.divider { width:50px; height:2px; background:linear-gradient(to right, var(--rose), var(--or)); margin:32px auto; border-radius:2px; }
 
-/* GRILLE PRIX */
-.prix-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:24px; max-width:1200px; margin:0 auto; }
-.prix-card { background:#fff; padding:28px; border-radius:12px; border:1px solid var(--rose-pale); text-align:center; transition:all 0.3s; }
-.prix-card:hover { box-shadow:0 12px 40px rgba(0,0,0,0.08); }
-.prix-card.popular { border:2px solid var(--rose); }
-.popular-badge { display:inline-block; background:var(--rose); color:white; padding:6px 16px; border-radius:20px; font-size:11px; margin-bottom:12px; }
-.nb-fleurs { font-size:48px; font-weight:300; color:var(--rose-fonce); margin:0; }
-.nb-label { font-size:13px; color:var(--texte-light); text-transform:uppercase; margin:8px 0 16px; }
-.prix-montant { font-size:36px; font-weight:300; color:var(--chocolat); margin:8px 0; }
-.prix-unit { font-size:12px; color:var(--texte-light); }
-.prix-details { list-style:none; margin:16px 0; font-size:13px; text-align:left; }
-.prix-details li { padding:6px 0; }
-.btn-panier { width:100%; padding:12px 0; margin-top:16px; background:var(--rose); color:white; border:none; border-radius:8px; cursor:pointer; font-weight:500; transition:all 0.3s; }
-.btn-panier:hover { background:var(--rose-fonce); }
+.prix-section { padding:90px 20px; background:linear-gradient(180deg, var(--blanc) 0%, var(--beige) 100%); }
+.prix-inner { max-width:1000px; margin:0 auto; text-align:center; }
+.prix-inner h2 { font-family:'Playfair Display',serif; font-size:clamp(30px,5vw,48px); font-weight:400; margin-bottom:12px; }
+.sous-titre { font-size:14px; font-weight:300; color:var(--texte-light); margin-bottom:16px; display:block; }
+.rose-note { display:inline-flex; align-items:center; gap:8px; background:var(--rose-pale); color:var(--rose-fonce); font-size:12px; font-weight:400; padding:8px 20px; border-radius:30px; margin-bottom:52px; }
 
-/* COMPOSITION PERSONNALISÉE */
-.custom-box { background:#fafaf8; padding:24px; border-radius:12px; margin:40px auto; max-width:600px; text-align:center; }
-.custom-selector { display:flex; align-items:center; justify-content:center; gap:12px; margin:16px 0; }
-.custom-selector button { width:40px; height:40px; border:1px solid var(--rose); background:white; border-radius:6px; cursor:pointer; font-size:18px; font-weight:bold; color:var(--rose-fonce); transition:all 0.2s; }
-.custom-selector button:hover { background:var(--rose-pale); }
-.custom-selector input { width:70px; height:40px; border:1px solid var(--rose); border-radius:6px; text-align:center; font-size:16px; font-weight:bold; }
-.custom-price { font-family:'Playfair Display',serif; font-size:28px; color:var(--rose-fonce); font-weight:bold; margin:12px 0; }
+.prix-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; }
+.prix-card { background:#fff; border-radius:20px; padding:40px 24px 36px; position:relative; box-shadow:0 4px 24px rgba(200,96,122,0.06); border:1.5px solid rgba(232,160,176,0.2); transition:all 0.3s; }
+.prix-card:hover { transform:translateY(-6px); box-shadow:0 20px 50px rgba(200,96,122,0.14); border-color:var(--rose); }
+.prix-card.popular { background:linear-gradient(160deg,#fce4ec,#fff0f5); border-color:var(--rose); }
+.popular-badge { position:absolute; top:14px; right:14px; background:var(--rose-fonce); color:#fff; font-size:9px; font-weight:400; letter-spacing:2px; text-transform:uppercase; padding:4px 10px; border-radius:20px; }
+.nb-fleurs { font-family:'Playfair Display',serif; font-size:56px; font-weight:400; color:var(--rose-fonce); line-height:1; margin-bottom:4px; }
+.nb-label { font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--texte-light); margin-bottom:20px; display:block; }
+.prix-montant { font-family:'Playfair Display',serif; font-size:36px; font-weight:500; color:var(--chocolat); margin-bottom:4px; }
+.prix-unit { font-size:12px; color:var(--texte-light); font-weight:300; margin-bottom:20px; display:block; }
+.prix-details { font-size:12px; font-weight:300; color:var(--texte-light); line-height:2; list-style:none; }
+.prix-details li::before { content:'🌸 '; font-size:10px; }
+.btn-panier { background:var(--rose-fonce); color:#fff; border:none; padding:12px 24px; border-radius:50px; font-size:12px; font-weight:400; letter-spacing:2px; text-transform:uppercase; cursor:pointer; transition:all 0.3s; margin-top:20px; }
+.btn-panier:hover { background:#b04060; transform:translateY(-2px); }
 
-/* GALERIE */
-.galerie-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:28px; max-width:1200px; margin:40px auto; }
-.galerie-img { border-radius:12px; overflow:hidden; box-shadow:0 12px 40px rgba(0,0,0,0.12); }
-.galerie-img img { width:100%; height:auto; display:block; }
+.occasions { padding:90px 20px; max-width:1100px; margin:0 auto; }
+.occasions h2 { font-family:'Playfair Display',serif; font-size:clamp(30px,5vw,48px); font-weight:400; text-align:center; margin-bottom:52px; }
+.occ-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; }
+.occ-card { background:linear-gradient(160deg, var(--rose-pale), #fff); border-radius:16px; padding:36px 20px; text-align:center; transition:all 0.3s; border:1.5px solid rgba(232,160,176,0.2); }
+.occ-card:hover { transform:translateY(-4px); box-shadow:0 12px 40px rgba(200,96,122,0.1); border-color:var(--rose); }
+.occ-icon { font-size:32px; margin-bottom:12px; display:block; }
+.occ-card h3 { font-family:'Playfair Display',serif; font-size:18px; font-weight:400; margin-bottom:8px; }
+.occ-card p { font-size:12px; font-weight:300; color:var(--texte-light); line-height:1.6; }
 
-/* OCCASIONS */
-.occ-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; max-width:1200px; margin:40px auto; }
-.occ-card { background:#fff; padding:24px; border-radius:12px; text-align:center; border:1px solid var(--rose-pale); }
-.occ-icon { font-size:32px; display:block; margin-bottom:12px; }
-.occ-card h3 { font-size:16px; font-weight:500; margin:12px 0; }
-.occ-card p { font-size:13px; color:var(--texte-light); }
+.panier-section { padding:90px 20px; background:linear-gradient(160deg, #fce4ec 0%, #fde8d8 100%); }
+.panier-inner { max-width:900px; margin:0 auto; }
+.panier-section h2 { font-family:'Playfair Display',serif; font-size:clamp(32px,6vw,64px); font-weight:400; margin-bottom:16px; text-align:center; }
+.panier-items { margin:40px 0; }
+.panier-item { background:#fff; border-radius:16px; padding:20px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; }
+.item-info { text-align:left; flex:1; }
+.item-name { font-weight:600; margin-bottom:4px; }
+.item-price { font-size:14px; color:var(--texte-light); }
+.item-qty { display:flex; gap:8px; align-items:center; }
+.qty-btn { background:var(--rose-pale); border:none; padding:4px 8px; border-radius:4px; cursor:pointer; font-size:12px; }
+.item-remove { background:#f0f0f0; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-size:12px; color:var(--texte-light); }
 
-/* PANIER FLOTTANT */
-.panier-icon { position:fixed; bottom:24px; right:24px; width:60px; height:60px; background:var(--rose); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:28px; cursor:pointer; box-shadow:0 8px 24px rgba(0,0,0,0.15); z-index:100; transition:all 0.3s; }
-.panier-icon:hover { transform:scale(1.1); background:var(--rose-fonce); }
-.panier-count { position:absolute; top:-8px; right:-8px; background:var(--chocolat); color:white; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:bold; }
+.panier-total { background:#fff; border-radius:16px; padding:30px; margin-top:20px; }
+.total-row { display:flex; justify-content:space-between; margin-bottom:12px; font-size:14px; }
+.total-final { display:flex; justify-content:space-between; margin-top:20px; padding-top:20px; border-top:2px solid var(--rose-pale); font-family:'Playfair Display',serif; font-size:24px; font-weight:500; }
 
-/* POPUP */
-.popup-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center; }
+.checkout-form { margin-top:40px; padding:30px; background:#fff; border-radius:16px; }
+.form-group { margin-bottom:20px; }
+.form-group label { display:block; font-size:12px; font-weight:600; margin-bottom:8px; text-transform:uppercase; }
+.form-group input { width:100%; padding:12px; border:1px solid var(--rose); border-radius:8px; font-size:14px; }
+.form-group input:focus { outline:none; border-color:var(--rose-fonce); }
+.stripe-element { padding:12px; border:1px solid var(--rose); border-radius:8px; }
+#card-element { padding:12px; }
+
+.btn-checkout { width:100%; background:var(--rose-fonce); color:#fff; border:none; padding:16px; border-radius:50px; font-size:12px; font-weight:600; letter-spacing:3px; text-transform:uppercase; cursor:pointer; margin-top:20px; transition:all 0.3s; }
+.btn-checkout:hover { background:#b04060; }
+.btn-checkout:disabled { opacity:0.6; cursor:not-allowed; }
+
+.success-message { background:linear-gradient(160deg, #c8f0dd, #e8f8f0); padding:30px; border-radius:16px; text-align:center; margin-top:40px; }
+.success-message h3 { color:#2d5a47; margin-bottom:10px; }
+
+footer { background:var(--chocolat); padding:44px 20px; text-align:center; color:#fff; }
+.f-brand { font-family:'Playfair Display',serif; font-size:26px; font-style:italic; margin-bottom:6px; }
+.f-tag { font-size:10px; letter-spacing:4px; text-transform:uppercase; color:var(--or); }
+
+.panier-icon { position:fixed; bottom:20px; right:20px; background:var(--rose-fonce); color:#fff; width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:28px; cursor:pointer; box-shadow:0 4px 20px rgba(200,96,122,0.3); z-index:999; }
+.panier-count { position:absolute; top:-8px; right:-8px; background:#fff; color:var(--rose-fonce); width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600; }
+
+.popup-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.4); z-index:1000; align-items:center; justify-content:center; }
 .popup-overlay.active { display:flex; }
-.popup-content { background:white; padding:40px; border-radius:12px; text-align:center; max-width:400px; }
-.popup-check { font-size:48px; margin-bottom:16px; }
-.popup-content h3 { font-size:24px; margin:12px 0; }
-.popup-content p { color:var(--texte-light); margin:12px 0 24px; }
-.popup-buttons { display:flex; gap:12px; }
-.popup-buttons button { flex:1; padding:12px 20px; border:none; border-radius:8px; font-weight:500; cursor:pointer; transition:all 0.3s; }
-.popup-btn-primary { background:var(--rose); color:white; }
-.popup-btn-primary:hover { background:var(--rose-fonce); }
-.popup-btn-secondary { background:var(--rose-pale); color:var(--rose-fonce); }
-.popup-btn-secondary:hover { background:#f0c7d4; }
+.popup-content { background:#fff; padding:40px; border-radius:20px; text-align:center; max-width:400px; box-shadow:0 20px 60px rgba(0,0,0,0.3); animation:popupSlide 0.3s ease-out; }
+@keyframes popupSlide { 0%{transform:scale(0.8); opacity:0;} 100%{transform:scale(1); opacity:1;} }
+.popup-check { font-size:48px; margin-bottom:20px; }
+.popup-content h3 { font-family:'Playfair Display',serif; font-size:28px; margin-bottom:12px; color:var(--rose-fonce); }
+.popup-content p { font-size:14px; color:var(--texte); margin-bottom:20px; }
+.popup-btn { background:var(--rose-fonce); color:#fff; border:none; padding:12px 32px; border-radius:50px; font-size:12px; font-weight:600; letter-spacing:2px; text-transform:uppercase; cursor:pointer; }
+.popup-btn:hover { background:#b04060; }
 
-/* PAGES */
-.page { display:none; }
-.page.active { display:block; }
-
-/* PAGE PANIER */
-.panier-header { background:linear-gradient(135deg,var(--rose) 0%,var(--rose-fonce) 100%); padding:40px 20px; text-align:center; color:white; }
-.panier-header h1 { font-family:'Playfair Display',serif; font-size:42px; margin:0; }
-.panier-inner { max-width:1000px; margin:0 auto; padding:40px 20px; }
-.panier-items { margin:30px 0; }
-.panier-item { display:flex; justify-content:space-between; align-items:center; padding:16px; background:#fff; border-bottom:1px solid var(--rose-pale); }
-.item-info h3 { font-size:16px; margin:0 0 4px; }
-.item-info p { font-size:13px; color:var(--texte-light); }
-.panier-total { background:var(--beige); padding:24px; border-radius:12px; margin:30px 0; }
-.total-row { display:flex; justify-content:space-between; margin:10px 0; }
-.total-final { font-size:24px; font-weight:bold; color:var(--chocolat); margin-top:16px; padding-top:16px; border-top:2px solid var(--rose); }
-.checkout-form { background:#fff; padding:24px; border-radius:12px; margin-top:30px; }
-.form-group { margin:16px 0; }
-.form-group label { display:block; font-weight:500; margin-bottom:6px; font-size:13px; }
-.form-group input, .form-group textarea { width:100%; padding:12px; border:1px solid var(--rose-pale); border-radius:8px; font-family:'DM Sans',sans-serif; }
-.btn-checkout { width:100%; padding:14px; background:var(--chocolat); color:white; border:none; border-radius:8px; font-weight:500; cursor:pointer; font-size:16px; margin-top:20px; transition:all 0.3s; }
-.btn-checkout:hover { background:var(--rose-fonce); }
-.btn-checkout:disabled { opacity:0.5; cursor:not-allowed; }
-.success-msg { display:none; margin-top:20px; padding:20px; background:#d4edda; border-radius:8px; color:#155724; }
-
-/* FOOTER */
-footer { background:var(--chocolat); color:white; padding:40px 20px; text-align:center; }
-.f-brand { font-family:'Playfair Display',serif; font-size:24px; margin-bottom:8px; }
-.f-tag { font-size:13px; color:#ddd; }
-
-/* RESPONSIVE */
-@media(max-width:768px) {
-.hero h1 { font-size:42px; }
-.hero-sub { font-size:16px; }
-.prix-grid { grid-template-columns:1fr; }
-.occ-grid { grid-template-columns:1fr; }
-.galerie-grid { grid-template-columns:1fr; }
-h2 { font-size:28px; }
+@media(max-width:700px){
+.panier-item { flex-direction:column; align-items:flex-start; gap:12px; }
+.item-qty { margin-top:10px; }
+.form-group { margin-bottom:16px; }
 }
 </style>
 </head>
 <body>
-
-<!-- PAGE ACCUEIL -->
-<div class="page active" id="accueil">
 
 <!-- HERO -->
 <section class="hero">
@@ -156,16 +147,20 @@ h2 { font-size:28px; }
 <!-- INTRO -->
 <section class="intro">
 <span class="section-label">L'art du cadeau unique</span>
-<h2>Quand le chocolat devient une fleur</h2>
-<p>Chaque création est une œuvre artisanale, façonnée à la main avec du chocolat fondant et raffiné. La rose en chocolat est à <strong>3,50 €</strong> — disponible en bouquets (minimum 10 roses) pour une présentation parfaite et inoubliable.</p>
+<h2>Quand le chocolat<br>devient une fleur</h2>
+<div class="divider"></div>
+<p>Chaque création est une œuvre artisanale, façonnée à la main avec du chocolat fondant et raffiné. La rose en chocolat est à <strong>3,50 €</strong> — disponible en bouquets (minimum 10 roses) ou en box exclusives pour une présentation parfaite et inoubliable.</p>
 </section>
 
 <!-- PRIX -->
-<section id="prix">
+<section class="prix-section" id="prix">
+<div class="prix-inner">
+<span class="section-label">Nos tarifs</span>
 <h2>Choisissez votre composition</h2>
-<p style="text-align:center; color:var(--texte-light); margin-bottom:30px; font-size:13px;">La rose en chocolat est à <strong>3,50 €</strong> · Minimum 10 roses par bouquet</p>
-
+<span class="sous-titre">La rose en chocolat est à 3,50 € · Minimum 10 roses par bouquet</span>
+<span class="rose-note">🌹 Chaque fleur = 3,50 € de pur chocolat artisanal</span>
 <div class="prix-grid">
+
 <div class="prix-card">
 <div class="nb-fleurs">10</div>
 <span class="nb-label">fleurs en chocolat</span>
@@ -203,45 +198,124 @@ h2 { font-size:28px; }
 <li>Roses vraies + chocolat</li>
 <li>Gypsophile · Feuilles d'or</li>
 </ul>
-<button class="btn-panier" onclick="ajouterPanier('Bouquet 30 fleurs', 105)">Ajouter au panier</button>
-</div>
+<button class="btn-panier" onclick="ajouterPanier('Bouquet 30 fleurs (Populaire)', 105)">Ajouter au panier</button>
 </div>
 
-<!-- COMPOSITION PERSONNALISÉE -->
-<div class="custom-box">
-<h3 style="font-size:16px; margin-bottom:16px;">Composition personnalisée</h3>
-<p style="color:var(--texte-light); margin-bottom:16px; font-size:12px;">Sélectionne le nombre de roses (minimum 10)</p>
-<div class="custom-selector">
-<button onclick="diminuerRoses()">−</button>
-<input type="number" id="custom-roses" min="10" value="10" readonly>
-<button onclick="augmenterRoses()">+</button>
+
+
+<div class="prix-card">
+<span class="nb-label" style="margin-bottom:12px;">Composition personnalisée</span>
+<div style="margin-bottom:16px;">
+<label style="font-size:12px; color:var(--texte-light); display:block; margin-bottom:8px;">Nombre de roses (min. 10)</label>
+<input type="number" id="custom-roses" min="10" step="10" value="10" style="width:100%; padding:8px; border:1px solid var(--rose); border-radius:8px; font-size:14px;">
 </div>
-<div class="custom-price" id="custom-price">35 €</div>
+<div style="background:var(--rose-pale); padding:12px; border-radius:8px; margin-bottom:16px; font-family:'Playfair Display',serif; font-size:20px; color:var(--rose-fonce);">
+<span id="custom-price">35 €</span>
+</div>
 <button class="btn-panier" onclick="ajouterCustom()">Ajouter au panier</button>
 </div>
 
+</div>
+</div>
+
+
+</div>
 </section>
 
-<!-- GALERIE -->
-<section style="background:#fafaf8;">
-<h2>Regardez comment sont nos fleurs</h2>
-<div class="galerie-grid">
-<div class="galerie-img"><img src="/fleurs-rouge.jpg" alt="Bouquet roses rouges"></div>
-<div class="galerie-img"><img src="/fleurs-pastel.jpg" alt="Bouquet fleurs pastel"></div>
+<!-- GALERIE PHOTOS HD -->
+<section style="padding:90px 20px; background:#fafaf8;">
+<div style="max-width:1200px; margin:0 auto;">
+<span class="section-label">Nos créations</span>
+<h2 style="font-family:'Playfair Display',serif; font-size:clamp(30px,5vw,48px); font-weight:400; text-align:center; margin-bottom:52px;">Regardez comment sont nos fleurs</h2>
+
+<div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:32px; margin-bottom:40px;">
+<div style="border-radius:16px; overflow:hidden; box-shadow:0 12px 40px rgba(0,0,0,0.15);">
+<img src="/fleurs-rouge.jpg" alt="Bouquet roses rouges en chocolat - haute définition" style="width:100%; height:auto; display:block;">
 </div>
-<p style="text-align:center; color:var(--texte-light); margin-top:24px; font-size:13px;">Chaque fleur est façonnée à la main avec du chocolat fondant et raffiné. Les détails en feuille d'or créent une présentation spectaculaire et inoubliable.</p>
+
+<div style="border-radius:16px; overflow:hidden; box-shadow:0 12px 40px rgba(0,0,0,0.15);">
+<img src="/fleurs-pastel.jpg" alt="Bouquet fleurs pastel en chocolat - haute définition" style="width:100%; height:auto; display:block;">
+</div>
+</div>
+
+<div style="text-align:center; background:#fff; padding:40px; border-radius:16px;">
+<p style="font-size:15px; font-weight:300; line-height:1.9; color:var(--texte); max-width:600px; margin:0 auto;">
+Chaque fleur est façonnée à la main avec du chocolat fondant et raffiné. Les détails en feuille d'or et les arrangements avec vraies fleurs fraîches créent une présentation spectaculaire et inoubliable.
+</p>
+</div>
+</div>
 </section>
 
 <!-- OCCASIONS -->
-<section>
-<h2>Pour chaque moment</h2>
+<section class="occasions">
+<span class="section-label">Pour chaque moment</span>
+<h2>L'émotion parfaite,<br>pour chaque occasion</h2>
 <div class="occ-grid">
-<div class="occ-card"><div class="occ-icon">💍</div><h3>Saint-Valentin</h3><p>Offrez plus qu'un bouquet.</p></div>
-<div class="occ-card"><div class="occ-icon">🌙</div><h3>Fête de l'Aïd</h3><p>Célébrez la fête avec douceur.</p></div>
-<div class="occ-card"><div class="occ-icon">🎂</div><h3>Anniversaire</h3><p>Un cadeau inoubliable.</p></div>
-<div class="occ-card"><div class="occ-icon">🌸</div><h3>Fête des Mères</h3><p>Pour la femme importante.</p></div>
-<div class="occ-card"><div class="occ-icon">👰‍🤵‍</div><h3>Mariage</h3><p>Célébrez votre amour.</p></div>
-<div class="occ-card"><div class="occ-icon">🎁</div><h3>Toutes occasions</h3><p>Chaque victoire compte.</p></div>
+<div class="occ-card"><span class="occ-icon">💍</span><h3>Saint-Valentin</h3><p>Offrez plus qu'un bouquet. Offrez un souvenir qui se savoure.</p></div>
+<div class="occ-card"><span class="occ-icon">🌙</span><h3>Fête de l'Aïd</h3><p>Célébrez la fête avec douceur et élégance.</p></div>
+<div class="occ-card"><span class="occ-icon">🎂</span><h3>Anniversaire</h3><p>Un cadeau inoubliable, beau et délicieux.</p></div>
+<div class="occ-card"><span class="occ-icon">🌸</span><h3>Fête des Mères</h3><p>Pour honorer la femme la plus importante de votre vie.</p></div>
+<div class="occ-card"><span class="occ-icon">👰‍🤵‍</span><h3>Mariage</h3><p>Célébrez votre amour avec un bouquet unique.</p></div>
+<div class="occ-card"><span class="occ-icon">🎁</span><h3>Toutes occasions</h3><p>Naissance, diplôme… chaque victoire mérite son bouquet.</p></div>
+</div>
+</section>
+
+<!-- PANIER & CHECKOUT -->
+<section class="panier-section" id="panier">
+<div class="panier-inner">
+<h2>Votre commande</h2>
+<div id="panier-vide" style="text-align:center; padding:40px; color:var(--texte-light);">
+<p>Votre panier est vide. Commencez par choisir un bouquet ! 🌹</p>
+</div>
+<div id="panier-contenu" style="display:none;">
+<div class="panier-items" id="items-list"></div>
+<div class="panier-total">
+<div class="total-row">
+<span>Sous-total</span>
+<span id="subtotal">0 €</span>
+</div>
+<div class="total-row">
+<span>Livraison (Île-de-France)</span>
+<span id="shipping">5 €</span>
+</div>
+<div class="total-final">
+<span>Total</span>
+<span id="total">5 €</span>
+</div>
+</div>
+
+<div class="checkout-form">
+<h3 style="margin-bottom:20px; font-family:'Playfair Display',serif; font-size:24px;">Vos informations</h3>
+<div class="form-group">
+<label>Nom complet</label>
+<input type="text" id="name" placeholder="Votre nom" required>
+</div>
+<div class="form-group">
+<label>Email</label>
+<input type="email" id="email" placeholder="votre@email.com" required>
+</div>
+<div class="form-group">
+<label>Téléphone</label>
+<input type="tel" id="phone" placeholder="+33 6 XX XX XX XX" required>
+</div>
+<div class="form-group">
+<label>Adresse de livraison</label>
+<input type="text" id="address" placeholder="Adresse complète" required>
+</div>
+
+<h3 style="margin-top:30px; margin-bottom:20px; font-family:'Playfair Display',serif; font-size:24px;">Paiement</h3>
+<div class="form-group">
+<label>Numéro de carte</label>
+<div id="card-element" class="stripe-element"></div>
+</div>
+<button class="btn-checkout" id="checkout-btn" onclick="traiterPaiement()">Valider la commande · <span id="btn-total">5 €</span></button>
+</div>
+
+<div id="success-msg" class="success-message" style="display:none;">
+<h3>✨ Commande validée !</h3>
+<p>Merci pour votre achat. Vous recevrez un email de confirmation avec les détails de livraison.</p>
+</div>
+</div>
 </div>
 </section>
 
@@ -251,92 +325,19 @@ h2 { font-size:28px; }
 <span class="f-tag">La gourmandise qui fleurit vos fêtes</span>
 </footer>
 
-</div>
-
-<!-- PAGE PANIER -->
-<div class="page" id="panier">
-<div class="panier-header">
-<h1>Bouquet Gourmand</h1>
-</div>
-
-<div class="panier-inner">
-<h2 style="text-align:left; margin-bottom:24px;">Votre commande</h2>
-
-<div class="panier-items" id="panier-items"></div>
-
-<div class="panier-total">
-<div class="total-row">
-<span>Sous-total</span>
-<strong id="subtotal">0 €</strong>
-</div>
-<div class="total-row">
-<span>Livraison</span>
-<strong>5 €</strong>
-</div>
-<div class="total-final">
-<span>TOTAL</span>
-<strong id="total">5 €</strong>
-</div>
-</div>
-
-<div class="checkout-form">
-<h3 style="margin-bottom:16px;">Vos informations</h3>
-
-<div class="form-group">
-<label>Nom complet</label>
-<input type="text" id="name" placeholder="Votre nom">
-</div>
-
-<div class="form-group">
-<label>Email</label>
-<input type="email" id="email" placeholder="votre@email.com">
-</div>
-
-<div class="form-group">
-<label>Téléphone</label>
-<input type="tel" id="phone" placeholder="+33 6 XX XX XX XX">
-</div>
-
-<div class="form-group">
-<label>Adresse de livraison</label>
-<textarea id="address" rows="3"></textarea>
-</div>
-
-<h3 style="margin:24px 0 16px;">Paiement</h3>
-<div class="form-group">
-<label>Numéro de carte</label>
-<div id="card-element" style="padding:12px; border:1px solid var(--rose-pale); border-radius:8px;"></div>
-</div>
-
-<button class="btn-checkout" id="checkout-btn" onclick="traiterPaiement()">Valider la commande · <span id="btn-total">5 €</span></button>
-
-<div class="success-msg" id="success-msg">
-<h3>✨ Commande validée!</h3>
-<p>Merci pour votre achat.</p>
-</div>
-</div>
-
-<button class="btn-panier" onclick="retournerAccueil()" style="margin-top:20px; background:var(--rose-pale); color:var(--rose-fonce);">← Retour aux compositions</button>
-</div>
-
-</div>
-
-<!-- PANIER ICON -->
-<div class="panier-icon" onclick="goToCart()">
+<!-- ICONE PANIER FLOTTANT -->
+<div class="panier-icon" onclick="document.getElementById('panier').scrollIntoView({behavior:'smooth'})">
 🛒
 <span class="panier-count" id="cart-count" style="display:none;">0</span>
 </div>
 
-<!-- POPUP -->
+<!-- POPUP CONFIRMATION -->
 <div class="popup-overlay" id="popup-success">
 <div class="popup-content">
 <div class="popup-check">✨</div>
 <h3>Ajouté au panier!</h3>
-<p id="popup-text">Votre article a été ajouté.</p>
-<div class="popup-buttons">
-<button class="popup-btn-secondary" onclick="fermerPopup()">Continuer mes achats</button>
-<button class="popup-btn-primary" onclick="goToCart()">Aller au panier</button>
-</div>
+<p id="popup-text">Votre article a été ajouté avec succès.</p>
+<button class="popup-btn" onclick="fermerPopup()">Continuer</button>
 </div>
 </div>
 
@@ -354,123 +355,114 @@ mettreAJourPanier();
 afficherPopup(name);
 }
 
-function afficherPopup(nom) {
-document.getElementById('popup-text').textContent = nom + ' a été ajouté!';
+function afficherPopup(nomArticle) {
+document.getElementById('popup-text').textContent = nomArticle + ' a été ajouté à votre panier! 🎉';
 document.getElementById('popup-success').classList.add('active');
+setTimeout(() => {
+document.getElementById('popup-success').classList.remove('active');
+}, 3000);
 }
 
 function fermerPopup() {
 document.getElementById('popup-success').classList.remove('active');
 }
 
-function goToCart() {
-fermerPopup();
-document.getElementById('accueil').classList.remove('active');
-document.getElementById('panier').classList.add('active');
-mettreAJourPanierPage();
-window.scrollTo(0, 0);
-}
-
-function retournerAccueil() {
-document.getElementById('panier').classList.remove('active');
-document.getElementById('accueil').classList.add('active');
-window.scrollTo(0, 0);
-}
-
-function augmenterRoses() {
-let val = parseInt(document.getElementById('custom-roses').value) || 10;
-document.getElementById('custom-roses').value = val + 1;
-updateCustomPrice();
-}
-
-function diminuerRoses() {
-let val = parseInt(document.getElementById('custom-roses').value) || 10;
-if (val > 10) document.getElementById('custom-roses').value = val - 1;
-updateCustomPrice();
-}
-
-function updateCustomPrice() {
-let roses = parseInt(document.getElementById('custom-roses').value) || 10;
-document.getElementById('custom-price').textContent = (roses * 3.5).toFixed(2) + ' €';
-}
+// Composition personnalisée
+document.getElementById('custom-roses')?.addEventListener('input', function(e) {
+const roses = parseInt(e.target.value) || 10;
+if (roses < 10) e.target.value = 10;
+const price = (parseInt(e.target.value) || 10) * 3.5;
+document.getElementById('custom-price').textContent = price.toFixed(2) + ' €';
+});
 
 function ajouterCustom() {
-let roses = parseInt(document.getElementById('custom-roses').value) || 10;
-ajouterPanier('Bouquet ' + roses + ' roses personnalisé', roses * 3.5);
+const roses = parseInt(document.getElementById('custom-roses').value) || 10;
+const price = roses * 3.5;
+ajouterPanier('Bouquet personnalisé ' + roses + ' roses', price);
 document.getElementById('custom-roses').value = 10;
-updateCustomPrice();
+document.getElementById('custom-price').textContent = '35 €';
 }
 
 function mettreAJourPanier() {
-let count = document.getElementById('cart-count');
-if (panier.length > 0) {
-count.style.display = 'flex';
-count.textContent = panier.length;
-} else {
-count.style.display = 'none';
-}
-}
-
-function mettreAJourPanierPage() {
-let items = document.getElementById('panier-items');
-items.innerHTML = '';
-let subtotal = 0;
+const pantierVide = document.getElementById('panier-vide');
+const pantierContenu = document.getElementById('panier-contenu');
+const itemsList = document.getElementById('items-list');
+const cartCount = document.getElementById('cart-count');
 
 if (panier.length === 0) {
-items.innerHTML = '<p style="text-align:center; color:var(--texte-light); padding:40px;">Votre panier est vide</p>';
-document.getElementById('subtotal').textContent = '0 €';
-document.getElementById('total').textContent = '5 €';
-document.getElementById('btn-total').textContent = '5 €';
+pantierVide.style.display = 'block';
+pantierContenu.style.display = 'none';
+cartCount.style.display = 'none';
 return;
 }
 
+pantierVide.style.display = 'none';
+pantierContenu.style.display = 'block';
+cartCount.style.display = 'flex';
+cartCount.textContent = panier.length;
+
+itemsList.innerHTML = '';
+let subtotal = 0;
+
 panier.forEach((item, idx) => {
 subtotal += item.price;
-items.innerHTML += `
+itemsList.innerHTML += `
 <div class="panier-item">
 <div class="item-info">
-<h3>${item.name}</h3>
-<p>${item.price.toFixed(2)} €</p>
+<div class="item-name">${item.name}</div>
+<div class="item-price">${item.price} €</div>
 </div>
-<button onclick="supprimerItem(${idx})" style="background:#ff6b6b; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer;">Supprimer</button>
+<div class="item-qty">
+<button class="qty-btn" onclick="supprimerItem(${idx})">Supprimer</button>
+</div>
 </div>
 `;
 });
 
-let total = subtotal + 5;
-document.getElementById('subtotal').textContent = subtotal.toFixed(2) + ' €';
-document.getElementById('total').textContent = total.toFixed(2) + ' €';
-document.getElementById('btn-total').textContent = total.toFixed(2) + ' €';
+const shipping = 5;
+const total = subtotal + shipping;
+
+document.getElementById('subtotal').textContent = subtotal + ' €';
+document.getElementById('total').textContent = total + ' €';
+document.getElementById('btn-total').textContent = total + ' €';
 }
 
 function supprimerItem(idx) {
 panier.splice(idx, 1);
 localStorage.setItem('panier', JSON.stringify(panier));
 mettreAJourPanier();
-mettreAJourPanierPage();
 }
 
 async function traiterPaiement() {
-let name = document.getElementById('name').value;
-let email = document.getElementById('email').value;
-let phone = document.getElementById('phone').value;
-let address = document.getElementById('address').value;
+const name = document.getElementById('name').value;
+const email = document.getElementById('email').value;
+const phone = document.getElementById('phone').value;
+const address = document.getElementById('address').value;
 
-if (!name || !email || !phone || !address || panier.length === 0) {
-alert('Tous les champs requis');
+if (!name || !email || !phone || !address) {
+alert('Tous les champs sont obligatoires');
 return;
 }
 
+if (panier.length === 0) {
+alert('Votre panier est vide');
+return;
+}
+
+const subtotal = panier.reduce((sum, item) => sum + item.price, 0);
+const total = (subtotal + 5) * 100;
+
 document.getElementById('checkout-btn').disabled = true;
+
 const {token} = await stripe.createToken(cardElement);
 
 if (token) {
+document.getElementById('checkout-form').style.display = 'none';
 document.getElementById('success-msg').style.display = 'block';
 panier = [];
 localStorage.removeItem('panier');
-mettreAJourPanier();
 } else {
-alert('Erreur paiement');
+alert('Erreur paiement. Vérifiez vos données de carte.');
 document.getElementById('checkout-btn').disabled = false;
 }
 }
