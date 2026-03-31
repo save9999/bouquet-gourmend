@@ -263,85 +263,7 @@ Chaque fleur est façonnée à la main avec du chocolat fondant et raffiné. Les
 </div>
 </section>
 
-<!-- PAGE PANIER DÉDIÉE (cachée par défaut) -->
-<div id="panier-page" style="display:none;">
-<section style="padding:40px 20px; background:linear-gradient(135deg,var(--rose-pale) 0%,#f5dce5 100%); text-align:center;">
-<h1 style="font-family:'Playfair Display',serif; font-size:48px; margin:0;">Bouquet Gourmand</h1>
-</section>
-
-<section style="max-width:1000px; margin:0 auto; padding:40px 20px;">
-<div style="display:flex; align-items:center; gap:12px; margin-bottom:30px; cursor:pointer;" onclick="retournerAccueil()">
-<span style="font-size:20px;">←</span>
-<span style="color:var(--rose-fonce); font-weight:500;">Retour aux compositions</span>
-</div>
-
-<h2 style="font-family:'Playfair Display',serif; font-size:32px; margin-bottom:30px;">Votre commande</h2>
-
-<div id="panier-vide" style="text-align:center; padding:40px; color:var(--texte-light);">
-<p>Votre panier est vide</p>
-</div>
-
-<div id="panier-contenu" style="display:none;">
-<div class="panier-items" id="items-list"></div>
-
-<div style="background:var(--beige); padding:24px; border-radius:12px; margin:30px 0;">
-<div style="display:flex; justify-content:space-between; margin:10px 0;">
-<span>Sous-total</span>
-<strong id="subtotal2">0 €</strong>
-</div>
-<div style="display:flex; justify-content:space-between; margin:10px 0;">
-<span>Livraison</span>
-<strong>5 €</strong>
-</div>
-<div style="display:flex; justify-content:space-between; font-size:20px; font-weight:bold; margin-top:16px; padding-top:16px; border-top:2px solid var(--rose);">
-<span>TOTAL</span>
-<strong id="total2">5 €</strong>
-</div>
-</div>
-
-<div style="background:#fff; padding:24px; border-radius:12px;">
-<h3 style="margin-bottom:20px; font-family:'Playfair Display',serif; font-size:20px;">Vos informations</h3>
-
-<div class="form-group">
-<label>Nom complet</label>
-<input type="text" id="name2" placeholder="Votre nom" required>
-</div>
-
-<div class="form-group">
-<label>Email</label>
-<input type="email" id="email2" placeholder="votre@email.com" required>
-</div>
-
-<div class="form-group">
-<label>Téléphone</label>
-<input type="tel" id="phone2" placeholder="+33 6 XX XX XX XX" required>
-</div>
-
-<div class="form-group">
-<label>Adresse de livraison</label>
-<textarea id="address2" style="width:100%; padding:12px; border:1px solid var(--rose-pale); border-radius:8px; font-family:'DM Sans',sans-serif;" rows="3"></textarea>
-</div>
-
-<h3 style="margin-top:30px; margin-bottom:20px; font-family:'Playfair Display',serif; font-size:20px;">Paiement</h3>
-<div class="form-group">
-<label>Numéro de carte</label>
-<div id="card-element2" style="padding:12px; border:1px solid var(--rose-pale); border-radius:8px;"></div>
-</div>
-
-<button class="btn-checkout" id="checkout-btn2" onclick="traiterPaiement2()">Valider la commande · <span id="btn-total2">5 €</span></button>
-
-<div id="success-msg2" class="success-message" style="display:none; margin-top:20px; padding:20px; background:#d4edda; border-radius:8px; color:#155724;">
-<h3>✨ Commande validée!</h3>
-<p>Merci pour votre achat. Vous recevrez un email de confirmation.</p>
-</div>
-</div>
-
-</div>
-</section>
-</div>
-
-<!-- PANIER & CHECKOUT (ancienne version - cachée) -->
-<section class="panier-section" id="panier" style="display:none;">
+<!-- (PANIER SUR PAGE SÉPARÉE) -->
 <div class="panier-inner">
 <h2>Votre commande</h2>
 <div id="panier-vide" style="text-align:center; padding:40px; color:var(--texte-light);">
@@ -406,7 +328,7 @@ Chaque fleur est façonnée à la main avec du chocolat fondant et raffiné. Les
 </footer>
 
 <!-- ICONE PANIER FLOTTANT -->
-<div class="panier-icon" onclick="showPanierPage()">
+<div class="panier-icon" onclick="window.location.href='/panier.html'">
 🛒
 <span class="panier-count" id="cart-count" style="display:none;">0</span>
 </div>
@@ -430,22 +352,7 @@ const elements = stripe.elements();
 const cardElement = elements.create('card');
 cardElement.mount('#card-element');
 
-// Pour page panier
-const cardElement2 = elements.create('card');
 
-function showPanierPage() {
-document.getElementById('accueil').style.display = 'none';
-document.getElementById('panier-page').style.display = 'block';
-cardElement2.mount('#card-element2');
-mettreAJourPanierPage();
-window.scrollTo(0, 0);
-}
-
-function retournerAccueil() {
-document.getElementById('panier-page').style.display = 'none';
-document.getElementById('accueil').style.display = 'block';
-window.scrollTo(0, 0);
-}
 
 function ajouterPanier(name, price) {
 panier.push({name, price});
@@ -462,75 +369,7 @@ document.getElementById('popup-success').classList.remove('active');
 }, 3000);
 }
 
-function mettreAJourPanierPage() {
-const panierVide = document.getElementById('panier-vide');
-const panierContenu = document.getElementById('panier-contenu');
-const itemsList = document.getElementById('items-list');
 
-if (panier.length === 0) {
-panierVide.style.display = 'block';
-panierContenu.style.display = 'none';
-return;
-}
-
-panierVide.style.display = 'none';
-panierContenu.style.display = 'block';
-itemsList.innerHTML = '';
-let subtotal = 0;
-
-panier.forEach((item, idx) => {
-subtotal += item.price;
-itemsList.innerHTML += `
-<div class="panier-item">
-<div class="item-info">
-<div class="item-name">${item.name}</div>
-<div class="item-price">${item.price} €</div>
-</div>
-<div class="item-qty">
-<button class="qty-btn" onclick="supprimerItem(${idx})">Supprimer</button>
-</div>
-</div>
-`;
-});
-
-const shipping = 5;
-const total = subtotal + shipping;
-
-document.getElementById('subtotal2').textContent = subtotal + ' €';
-document.getElementById('total2').textContent = total + ' €';
-document.getElementById('btn-total2').textContent = total + ' €';
-}
-
-async function traiterPaiement2() {
-const name = document.getElementById('name2').value;
-const email = document.getElementById('email2').value;
-const phone = document.getElementById('phone2').value;
-const address = document.getElementById('address2').value;
-
-if (!name || !email || !phone || !address) {
-alert('Tous les champs sont obligatoires');
-return;
-}
-
-if (panier.length === 0) {
-alert('Votre panier est vide');
-return;
-}
-
-document.getElementById('checkout-btn2').disabled = true;
-
-const {token} = await stripe.createToken(cardElement2);
-
-if (token) {
-document.getElementById('success-msg2').style.display = 'block';
-panier = [];
-localStorage.removeItem('panier');
-mettreAJourPanier();
-} else {
-alert('Erreur paiement. Vérifiez vos données de carte.');
-document.getElementById('checkout-btn2').disabled = false;
-}
-}
 
 function fermerPopup() {
 document.getElementById('popup-success').classList.remove('active');
