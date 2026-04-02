@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Bouquet Gourmand</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#111;color:#ddd}
+
+/* ── Layout ── */
+.layout{display:grid;grid-template-columns:320px 1fr;height:100vh}
+
+/* ── Sidebar ── */
+.sidebar{background:#181818;border-right:1px solid #2a2a2a;display:flex;flex-direction:column;overflow:hidden}
+
+.sidebar-head{padding:14px 16px;border-bottom:1px solid #2a2a2a;display:flex;align-items:center;gap:10px}
+.brand{font-family:Georgia,serif;font-style:italic;font-size:14px;color:#e8a0b0;white-space:nowrap}
+.pub-btn{margin-left:auto;background:#c8607a;color:#fff;border:none;padding:7px 16px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;letter-spacing:.5px;transition:all .2s;white-space:nowrap}
+.pub-btn:hover{background:#a0405a;transform:scale(1.03)}
+.pub-btn.busy{opacity:.6;cursor:wait}
+
+/* Tabs */
+.tabs{display:flex;border-bottom:1px solid #222;padding:0 8px;background:#161616}
+.tab{padding:9px 10px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#555;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;flex:1;text-align:center}
+.tab.on{color:#e8a0b0;border-bottom-color:#c8607a}
+
+/* Form */
+.scroll{flex:1;overflow-y:auto;padding:14px 14px 20px}
+.scroll::-webkit-scrollbar{width:3px}
+.scroll::-webkit-scrollbar-thumb{background:#333;border-radius:2px}
+
+.panel{display:none}
+.panel.on{display:block}
+
+.sec{margin-bottom:18px}
+.sec-title{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#444;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid #222}
+
+.field{margin-bottom:8px}
+.field label{display:block;font-size:10px;color:#666;margin-bottom:3px}
+.field input,.field textarea{width:100%;background:#222;border:1px solid #2e2e2e;border-radius:5px;padding:6px 8px;color:#ddd;font-size:12px;transition:border-color .2s;font-family:inherit}
+.field input:focus,.field textarea:focus{outline:none;border-color:#c8607a}
+.field textarea{resize:vertical;min-height:52px;line-height:1.5}
+.field input[type="color"]{width:34px;height:26px;padding:2px;cursor:pointer}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+
+.bcard{background:#202020;border:1px solid #2a2a2a;border-radius:7px;padding:10px;margin-bottom:8px}
+.bcard-title{font-size:10px;font-weight:700;color:#e8a0b0;margin-bottom:8px}
+
+.color-row{display:flex;align-items:center;gap:6px}
+.color-row input[type="text"]{flex:1}
+
+.img-prev{width:100%;height:70px;object-fit:cover;border-radius:5px;margin-top:5px;background:#2a2a2a;display:none}
+
+.hint{font-size:10px;color:#444;margin-top:6px;line-height:1.5}
+.hint a{color:#e8a0b0}
+
+/* ── Preview ── */
+.preview-area{display:flex;flex-direction:column;background:#141414}
+
+.prev-bar{padding:9px 14px;border-bottom:1px solid #222;display:flex;align-items:center;gap:10px}
+.prev-bar span{font-size:11px;color:#444}
+.devices{display:flex;background:#222;border-radius:5px;padding:2px;gap:2px}
+.dbtn{padding:4px 10px;border:none;background:none;color:#555;font-size:11px;cursor:pointer;border-radius:3px;transition:all .2s}
+.dbtn.on{background:#2e2e2e;color:#ddd}
+.prev-url{font-size:10px;color:#333;margin-left:auto}
+
+.prev-container{flex:1;display:flex;align-items:center;justify-content:center;padding:16px;overflow:hidden}
+.frame-wrap{background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.6);transition:all .3s;width:100%;height:100%}
+.frame-wrap.mobile{width:375px;height:667px;border-radius:18px;flex-shrink:0}
+#frame{width:100%;height:100%;border:none;display:block}
+
+.statusbar{padding:5px 14px;background:#0e0e0e;border-top:1px solid #222;display:flex;align-items:center;gap:7px;font-size:10px;color:#444}
+.dot{width:5px;height:5px;border-radius:50%;background:#4caf50;flex-shrink:0}
+.dot.spin{background:#f90;animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* Toast */
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(80px);background:#1e7e34;color:#fff;padding:10px 22px;border-radius:30px;font-size:12px;font-weight:500;transition:transform .3s;z-index:99;pointer-events:none}
+.toast.err{background:#c0392b}
+.toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar">
+  <div class="sidebar-head">
+    <span class="brand">🌸 Bouquet Gourmand</span>
+    <button class="pub-btn" id="pub-btn" onclick="publish()">Publier</button>
+  </div>
+
+  <div class="tabs">
+    <div class="tab on" onclick="tab('textes',this)">Textes</div>
+    <div class="tab" onclick="tab('tarifs',this)">Tarifs</div>
+    <div class="tab" onclick="tab('images',this)">Images</div>
+    <div class="tab" onclick="tab('style',this)">Style</div>
+  </div>
+
+  <div class="scroll">
+
+    <!-- TEXTES -->
+    <div class="panel on" id="p-textes">
+      <div class="sec">
+        <div class="sec-title">Hero</div>
+        <div class="field"><label>Badge supérieur</label><input id="heroTag" oninput="refresh()"></div>
+        <div class="field"><label>Titre principal</label><input id="heroTitle" oninput="refresh()"></div>
+        <div class="field"><label>Titre en italique</label><input id="heroEm" oninput="refresh()"></div>
+        <div class="field"><label>Sous-titre</label><input id="heroSub" oninput="refresh()"></div>
+        <div class="field"><label>Bouton</label><input id="heroCta" oninput="refresh()"></div>
+      </div>
+      <div class="sec">
+        <div class="sec-title">Introduction</div>
+        <div class="field"><label>Label section</label><input id="introLabel" oninput="refresh()"></div>
+        <div class="field"><label>Titre (↵ = saut de ligne)</label><textarea id="introTitle" oninput="refresh()"></textarea></div>
+        <div class="field"><label>Paragraphe</label><textarea id="introText" rows="4" oninput="refresh()"></textarea></div>
+      </div>
+      <div class="sec">
+        <div class="sec-title">Footer</div>
+        <div class="field"><label>Nom de marque</label><input id="footerBrand" oninput="refresh()"></div>
+        <div class="field"><label>Tagline</label><input id="footerTag" oninput="refresh()"></div>
+      </div>
+    </div>
+
+    <!-- TARIFS -->
+    <div class="panel" id="p-tarifs">
+      <div class="sec">
+        <div class="sec-title">Bouquets</div>
+        <div class="bcard">
+          <div class="bcard-title">🌸 Bouquet 1</div>
+          <div class="grid2">
+            <div class="field"><label>Nb fleurs</label><input type="number" id="b1Nb" oninput="refresh()"></div>
+            <div class="field"><label>Prix €</label><input type="number" id="b1Prix" oninput="refresh()"></div>
+          </div>
+          <div class="field"><label>Détail 1</label><input id="b1D1" oninput="refresh()"></div>
+          <div class="field"><label>Détail 2</label><input id="b1D2" oninput="refresh()"></div>
+          <div class="field"><label>Détail 3</label><input id="b1D3" oninput="refresh()"></div>
+        </div>
+        <div class="bcard">
+          <div class="bcard-title">🌹 Bouquet 2</div>
+          <div class="grid2">
+            <div class="field"><label>Nb fleurs</label><input type="number" id="b2Nb" oninput="refresh()"></div>
+            <div class="field"><label>Prix €</label><input type="number" id="b2Prix" oninput="refresh()"></div>
+          </div>
+          <div class="field"><label>Détail 1</label><input id="b2D1" oninput="refresh()"></div>
+          <div class="field"><label>Détail 2</label><input id="b2D2" oninput="refresh()"></div>
+          <div class="field"><label>Détail 3</label><input id="b2D3" oninput="refresh()"></div>
+        </div>
+        <div class="bcard">
+          <div class="bcard-title">⭐ Bouquet 3 (Populaire)</div>
+          <div class="grid2">
+            <div class="field"><label>Nb fleurs</label><input type="number" id="b3Nb" oninput="refresh()"></div>
+            <div class="field"><label>Prix €</label><input type="number" id="b3Prix" oninput="refresh()"></div>
+          </div>
+          <div class="field"><label>Détail 1</label><input id="b3D1" oninput="refresh()"></div>
+          <div class="field"><label>Détail 2</label><input id="b3D2" oninput="refresh()"></div>
+          <div class="field"><label>Détail 3</label><input id="b3D3" oninput="refresh()"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IMAGES -->
+    <div class="panel" id="p-images">
+      <div class="sec">
+        <div class="sec-title">Galerie</div>
+        <div class="field">
+          <label>Image 1 — URL</label>
+          <input type="url" id="img1" oninput="refresh();prevImg('img1','ip1')">
+          <img id="ip1" class="img-prev" alt="">
+        </div>
+        <div class="field">
+          <label>Image 2 — URL</label>
+          <input type="url" id="img2" oninput="refresh();prevImg('img2','ip2')">
+          <img id="ip2" class="img-prev" alt="">
+        </div>
+        <p class="hint">Hébergez vos photos sur <a href="https://imgbb.com" target="_blank">ImgBB.com</a> (gratuit) puis collez l'URL ici.</p>
+      </div>
+    </div>
+
+    <!-- STYLE -->
+    <div class="panel" id="p-style">
+      <div class="sec">
+        <div class="sec-title">Couleurs</div>
+        <div class="field">
+          <label>Rose principal</label>
+          <div class="color-row">
+            <input type="color" id="cRose" oninput="syncC('cRose','cRoseT');refresh()">
+            <input type="text" id="cRoseT" maxlength="7" oninput="syncCT('cRoseT','cRose');refresh()">
+          </div>
+        </div>
+        <div class="field">
+          <label>Rose foncé (boutons, accents)</label>
+          <div class="color-row">
+            <input type="color" id="cAccent" oninput="syncC('cAccent','cAccentT');refresh()">
+            <input type="text" id="cAccentT" maxlength="7" oninput="syncCT('cAccentT','cAccent');refresh()">
+          </div>
+        </div>
+        <div class="field">
+          <label>Chocolat (textes)</label>
+          <div class="color-row">
+            <input type="color" id="cChoco" oninput="syncC('cChoco','cChocoT');refresh()">
+            <input type="text" id="cChocoT" maxlength="7" oninput="syncCT('cChocoT','cChoco');refresh()">
+          </div>
+        </div>
+        <div class="field">
+          <label>Or (détails)</label>
+          <div class="color-row">
+            <input type="color" id="cOr" oninput="syncC('cOr','cOrT');refresh()">
+            <input type="text" id="cOrT" maxlength="7" oninput="syncCT('cOrT','cOr');refresh()">
+          </div>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-title">Accès publication</div>
+        <div class="field">
+          <label>GitHub Token (Personal Access Token)</label>
+          <input type="password" id="ghToken" placeholder="ghp_..." oninput="localStorage.setItem('gh_tok',this.value)">
+          <p class="hint">Créez un token sur <a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a> avec le droit <b>Contents write</b>. Stocké localement.</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end scroll -->
+</aside>
+
+<!-- ── PREVIEW ── -->
+<main class="preview-area">
+  <div class="prev-bar">
+    <span>Aperçu en direct</span>
+    <div class="devices">
+      <button class="dbtn on" onclick="device('desktop',this)">🖥 Bureau</button>
+      <button class="dbtn" onclick="device('mobile',this)">📱 Mobile</button>
+    </div>
+    <span class="prev-url">bouquet-gourmand.vercel.app</span>
+  </div>
+  <div class="prev-container">
+    <div class="frame-wrap" id="fw">
+      <iframe id="frame"></iframe>
+    </div>
+  </div>
+  <div class="statusbar">
+    <div class="dot" id="dot"></div>
+    <span id="stxt">Chargement...</span>
+  </div>
+</main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let src = '';
+
+// ─────────────────────────────────────────────────────────────────────────────
+async function init() {
+  status(1,'Chargement du site...');
+  try {
+    const r = await fetch('/index.html?t='+Date.now());
+    src = await r.text();
+    parse();
+    fill();
+    refresh();
+    status(0,'Prêt — modifiez les champs à gauche');
+  } catch(e){ status(1,'Erreur de chargement'); }
+
+  // Restore token
+  const tok = localStorage.getItem('gh_tok');
+  if(tok) document.getElementById('ghToken').value = tok;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+let cfg = {};
+function parse(){
+  const p = new DOMParser();
+  const d = p.parseFromString(src,'text/html');
+  const g = s => (d.querySelector(s)||{}).textContent?.trim() || '';
+  const cards = d.querySelectorAll('.prix-card');
+  const css = d.querySelector('style').textContent;
+  const cv = n => { const m = css.match(new RegExp('--'+n+':\\s*([^;]+)')); return m?m[1].trim():''; };
+  const imgs = d.querySelectorAll('img[src]');
+
+  cfg = {
+    heroTag:   g('.hero-tag'),
+    heroTitle: d.querySelector('.hero h1')?.childNodes[0]?.textContent?.trim()||'',
+    heroEm:    g('.hero h1 em'),
+    heroSub:   g('.hero-sub'),
+    heroCta:   g('.hero-cta'),
+    introLabel:g('.intro .section-label'),
+    introTitle:g('.intro h2'),
+    introText: d.querySelector('.intro p')?.innerHTML?.trim()||'',
+    footerBrand:g('.f-brand'),
+    footerTag:  g('.f-tag'),
+    b1Nb:cards[0]?.querySelector('.nb-fleurs')?.textContent||'10',
+    b1Prix:cards[0]?.querySelector('.prix-montant')?.textContent?.replace(/[^\d]/g,'')||'35',
+    b1D1:cards[0]?.querySelectorAll('.prix-details li')[0]?.textContent||'',
+    b1D2:cards[0]?.querySelectorAll('.prix-details li')[1]?.textContent||'',
+    b1D3:cards[0]?.querySelectorAll('.prix-details li')[2]?.textContent||'',
+    b2Nb:cards[1]?.querySelector('.nb-fleurs')?.textContent||'20',
+    b2Prix:cards[1]?.querySelector('.prix-montant')?.textContent?.replace(/[^\d]/g,'')||'70',
+    b2D1:cards[1]?.querySelectorAll('.prix-details li')[0]?.textContent||'',
+    b2D2:cards[1]?.querySelectorAll('.prix-details li')[1]?.textContent||'',
+    b2D3:cards[1]?.querySelectorAll('.prix-details li')[2]?.textContent||'',
+    b3Nb:cards[2]?.querySelector('.nb-fleurs')?.textContent||'30',
+    b3Prix:cards[2]?.querySelector('.prix-montant')?.textContent?.replace(/[^\d]/g,'')||'105',
+    b3D1:cards[2]?.querySelectorAll('.prix-details li')[0]?.textContent||'',
+    b3D2:cards[2]?.querySelectorAll('.prix-details li')[1]?.textContent||'',
+    b3D3:cards[2]?.querySelectorAll('.prix-details li')[2]?.textContent||'',
+    img1: toAbs(imgs[0]?.getAttribute('src')||'/fleurs-rouge.jpg'),
+    img2: toAbs(imgs[1]?.getAttribute('src')||'/fleurs-pastel.jpg'),
+    cRose:   cv('rose'),
+    cAccent: cv('rose-fonce'),
+    cChoco:  cv('chocolat'),
+    cOr:     cv('or'),
+  };
+}
+
+function toAbs(u){ return u.startsWith('/')? 'https://bouquet-gourmand.vercel.app'+u : u; }
+
+function fill(){
+  const s=(id,v)=>{ const e=document.getElementById(id); if(e) e.value=v||''; };
+  s('heroTag',cfg.heroTag); s('heroTitle',cfg.heroTitle);
+  s('heroEm',cfg.heroEm); s('heroSub',cfg.heroSub); s('heroCta',cfg.heroCta);
+  s('introLabel',cfg.introLabel); s('introTitle',cfg.introTitle);
+  document.getElementById('introText').value = cfg.introText.replace(/<[^>]+>/g,'');
+  s('footerBrand',cfg.footerBrand); s('footerTag',cfg.footerTag);
+  s('b1Nb',cfg.b1Nb); s('b1Prix',cfg.b1Prix); s('b1D1',cfg.b1D1); s('b1D2',cfg.b1D2); s('b1D3',cfg.b1D3);
+  s('b2Nb',cfg.b2Nb); s('b2Prix',cfg.b2Prix); s('b2D1',cfg.b2D1); s('b2D2',cfg.b2D2); s('b2D3',cfg.b2D3);
+  s('b3Nb',cfg.b3Nb); s('b3Prix',cfg.b3Prix); s('b3D1',cfg.b3D1); s('b3D2',cfg.b3D2); s('b3D3',cfg.b3D3);
+  s('img1',cfg.img1); s('img2',cfg.img2);
+  prevImg('img1','ip1'); prevImg('img2','ip2');
+  s('cRose',cfg.cRose); s('cRoseT',cfg.cRose);
+  s('cAccent',cfg.cAccent); s('cAccentT',cfg.cAccent);
+  s('cChoco',cfg.cChoco); s('cChocoT',cfg.cChoco);
+  s('cOr',cfg.cOr); s('cOrT',cfg.cOr);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+function v(id){ return document.getElementById(id)?.value||''; }
+
+function buildHTML(prod=false){
+  const p = new DOMParser();
+  const d = p.parseFromString(src,'text/html');
+
+  // Helpers
+  const set = (sel,val) => { const e=d.querySelector(sel); if(e) e.textContent=val; };
+  const html = (sel,val) => { const e=d.querySelector(sel); if(e) e.innerHTML=val; };
+
+  // Hero
+  set('.hero-tag', v('heroTag'));
+  html('.hero h1', esc(v('heroTitle'))+'<br><em>'+esc(v('heroEm'))+'</em>');
+  set('.hero-sub', v('heroSub'));
+  set('.hero-cta', v('heroCta'));
+
+  // Intro
+  set('.intro .section-label', v('introLabel'));
+  html('.intro h2', v('introTitle').replace(/\n/g,'<br>'));
+  set('.intro p', v('introText'));
+
+  // Footer
+  set('.f-brand', v('footerBrand'));
+  set('.f-tag', v('footerTag'));
+
+  // Bouquets
+  const cards = d.querySelectorAll('.prix-card');
+  [1,2,3].forEach(i=>{
+    const c = cards[i-1]; if(!c) return;
+    c.querySelector('.nb-fleurs').textContent = v('b'+i+'Nb');
+    c.querySelector('.prix-montant').textContent = v('b'+i+'Prix')+' €';
+    const lis = c.querySelectorAll('.prix-details li');
+    ['D1','D2','D3'].forEach((d2,j)=>{ if(lis[j]) lis[j].textContent = v('b'+i+d2); });
+    const btn=c.querySelector('.btn-panier');
+    if(btn) btn.setAttribute('onclick',`ajouterPanier('Bouquet ${v('b'+i+'Nb')} fleurs',${v('b'+i+'Prix')})`);
+  });
+
+  // Images
+  const imgs = d.querySelectorAll('img[src]');
+  if(v('img1') && imgs[0]) imgs[0].src = v('img1');
+  if(v('img2') && imgs[1]) imgs[1].src = v('img2');
+
+  // Couleurs — style override
+  const st = d.createElement('style');
+  st.textContent=`:root{--rose:${v('cRose')};--rose-fonce:${v('cAccent')};--rose-pale:${mix(v('cAccent'),93)};--beige:#f9f0eb;--chocolat:${v('cChoco')};--or:${v('cOr')};--blanc:#fffaf8;--texte:${v('cChoco')};--texte-light:${mix(v('cChoco'),40)}}`;
+  d.head.appendChild(st);
+
+  // Base tag pour le preview (ressources relatives)
+  if(!prod){
+    const b=d.createElement('base');
+    b.href='https://bouquet-gourmand.vercel.app/';
+    d.head.insertBefore(b,d.head.firstChild);
+  }
+
+  return '<!DOCTYPE html>\n'+d.documentElement.outerHTML;
+}
+
+function mix(hex,pct){
+  try{
+    const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+    const m=c=>Math.round(c+(255-c)*pct/100).toString(16).padStart(2,'0');
+    return '#'+m(r)+m(g)+m(b);
+  }catch{return '#fde8ee'}
+}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+// ─────────────────────────────────────────────────────────────────────────────
+function refresh(){
+  if(!src) return;
+  document.getElementById('frame').srcdoc = buildHTML(false);
+  status(0,'Aperçu à jour');
+}
+
+// ── Tabs ──────────────────────────────────────────────────────────────────────
+function tab(name,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('p-'+name).classList.add('on');
+}
+
+// ── Device ────────────────────────────────────────────────────────────────────
+function device(d,el){
+  document.querySelectorAll('.dbtn').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('fw').classList.toggle('mobile', d==='mobile');
+}
+
+// ── Couleurs ──────────────────────────────────────────────────────────────────
+function syncC(src,dst){ document.getElementById(dst).value=document.getElementById(src).value }
+function syncCT(src,dst){ const v=document.getElementById(src).value; if(/^#[0-9a-fA-F]{6}$/.test(v)) document.getElementById(dst).value=v }
+
+// ── Images ────────────────────────────────────────────────────────────────────
+function prevImg(inId,prevId){
+  const url=document.getElementById(inId)?.value;
+  const img=document.getElementById(prevId);
+  if(img&&url){ img.src=url; img.style.display='block'; }
+}
+
+// ── Status ────────────────────────────────────────────────────────────────────
+function status(busy,msg){
+  document.getElementById('dot').className='dot'+(busy?' spin':'');
+  document.getElementById('stxt').textContent=msg;
+}
+
+// ── Toast ─────────────────────────────────────────────────────────────────────
+function toast(msg,err=false){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast'+(err?' err':'')+' show';
+  setTimeout(()=>t.classList.remove('show'),3500);
+}
+
+// ── Publish ───────────────────────────────────────────────────────────────────
+async function publish(){
+  const btn=document.getElementById('pub-btn');
+  const tok=localStorage.getItem('gh_tok')||v('ghToken');
+  if(!tok){
+    toast('⚠ Entrez votre GitHub Token dans l\'onglet Style',true);
+    tab('style',document.querySelectorAll('.tab')[3]);
+    return;
+  }
+  btn.textContent='Publication...'; btn.classList.add('busy');
+  status(1,'Publication en cours...');
+  try{
+    const res=await fetch('/api/publish',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({ html:buildHTML(true), token:tok })
+    });
+    const data=await res.json();
+    if(res.ok){
+      toast('✓ Site publié ! Mise à jour dans 30s');
+      status(0,'Publié avec succès');
+      src=buildHTML(true); // base pour les prochaines modifs
+    } else {
+      toast('✗ '+( data.error||'Erreur inconnue'),true);
+      status(0,'Échec de publication');
+    }
+  }catch(e){
+    toast('✗ Erreur réseau',true);
+    status(0,'Erreur réseau');
+  }
+  btn.textContent='Publier'; btn.classList.remove('busy');
+}
+
+init();
+</script>
+</body>
+</html>

@@ -1,7 +1,19 @@
 {
   "version": 2,
-  "buildCommand": null,
-  "outputDirectory": ".",
-  "cleanUrls": true,
-  "trailingSlash": false
+  "builds": [
+    { "src": "api/publish.js", "use": "@vercel/node" },
+    { "src": "*.html", "use": "@vercel/static" },
+    { "src": "*.jpg", "use": "@vercel/static" },
+    { "src": "*.json", "use": "@vercel/static" },
+    { "src": "public/**", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/api/publish", "dest": "/api/publish.js" },
+    { "src": "/admin", "dest": "/admin.html" },
+    { "src": "/panier", "dest": "/panier.html" },
+    { "src": "/", "dest": "/index.html" },
+    { "src": "/(.*\\.jpg)", "dest": "/$1" },
+    { "src": "/(.*)", "dest": "/$1" }
+  ],
+  "cleanUrls": true
 }
